@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="HydroSIM">
+<defs><linearGradient id="md" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#29A8E0"/><stop offset="1" stop-color="#1565C0"/></linearGradient><linearGradient id="mf" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1565C0"/><stop offset=".35" stop-color="#29A8E0"/><stop offset=".6" stop-color="#2EC4B6"/><stop offset=".82" stop-color="#F5A524"/><stop offset="1" stop-color="#E8573A"/></linearGradient><clipPath id="mc"><circle cx="256" cy="256" r="236"/></clipPath></defs>
+<circle cx="256" cy="256" r="248" fill="#0A2A5E"/>
+<circle cx="256" cy="256" r="236" fill="none" stroke="#29A8E0" stroke-width="8"/>
+<g clip-path="url(#mc)">
+  <path d="M10 372C110 330 200 352 270 336S420 296 510 318V520H10Z" fill="#1565C0" opacity=".9"/>
+  <path d="M10 404C120 372 210 390 290 374S430 348 510 362V520H10Z" fill="#29A8E0" opacity=".55"/>
+  <path d="M40 330C120 300 170 350 250 320S380 270 480 300" fill="none" stroke="url(#mf)" stroke-width="10" stroke-linecap="round"/>
+</g>
+<g transform="translate(256 246) scale(1.55)">
+  <path d="M0 -120C18 -85 50 -55 50 -25A50 50 0 1 1 -50 -25C-50 -55 -18 -85 0 -120Z" fill="#fff"/>
+  <path d="M0 -102C14 -76 38 -52 38 -26A38 38 0 1 1 -38 -26C-38 -52 -14 -76 0 -102Z" fill="url(#md)"/>
+  <path d="M-36 -8C-24 -16 -12 -16 0 -8S24 0 36 -8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+  <path d="M-30 9C-20 3 -10 3 0 9S20 15 30 9" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="4.5" stroke-linecap="round"/>
+</g>
+</svg>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><link rel="icon" href="mark.png"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HydroSIM</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,650&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"><style id="css">
+/* VOICE: calm, scholarly, precise — a hydraulics lab's own page
+   IDEA: a river confluence — two channels meeting, the subject of his research
+   PICTURE: full-width plan view of a right-angled open-channel junction with moving streamlines
+   COLOUR and TYPE: deep river teal fields, white, sediment ochre accent; Source Serif 4 + IBM Plex Sans
+   LAYOUT: river band, profile card overlapping it, then sections on a 1180px column */
+:root{color-scheme:light dark;--bg:light-dark(#fff,#0a1a1d);--ink:light-dark(#11272c,#e4efee);--muted:light-dark(#4f666b,#9fb6b8);--line:light-dark(#d8e3e3,#21393e);--soft:light-dark(#f1f6f6,#10262a);--land:light-dark(#0d4d59,#0b3740);--water:light-dark(#2e8c97,#1f6c76);--silt:light-dark(#b8741f,#e0a052);--card:light-dark(#fff,#0f2327)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "IBM Plex Sans",system-ui,sans-serif;overflow-x:clip}
+html{scroll-padding-top:72px;scroll-behavior:smooth}
+h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;font-weight:650;line-height:1.1;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,3.4vw,38px);margin-bottom:22px}
+h3{font-size:19px;font-weight:600;margin:26px 0 12px}
+a{color:var(--water)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 max(4vw,16px)}
+.band{padding:clamp(36px,5vw,72px) 0;border-top:1px solid var(--line)}
+.band.alt{background:var(--soft)}
+nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--land) 96%,transparent);color:#fff;backdrop-filter:blur(6px)}
+nav .wrap{display:flex;align-items:center;gap:16px;min-height:60px}
+.brand{font-family:"Source Serif 4",serif;font-weight:650;font-size:18px;white-space:nowrap;color:#fff;text-decoration:none}
+.links{display:flex;gap:4px;overflow-x:auto;flex:1;scrollbar-width:none}
+.links a{flex:none;color:#d7ecee;text-decoration:none;padding:10px 10px;font-size:15px;border-radius:6px}
+.links a:hover,.links a:focus-visible{background:#ffffff1f;color:#fff}
+button{font:inherit;cursor:pointer;border-radius:8px;min-height:44px;padding:0 16px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+button:focus-visible,a:focus-visible,[contenteditable]:focus-visible{outline:3px solid var(--silt);outline-offset:2px}
+.btn-edit{background:#fff;color:var(--land);border:0;font-weight:600;flex:none}
+.hero{position:relative;height:clamp(240px,32vw,420px);background:var(--land);overflow:hidden}
+.hero svg,.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:40%;background:linear-gradient(transparent,#0006);pointer-events:none}
+.flowfig{margin:0 0 36px}
+.flowfig video{width:100%;aspect-ratio:1280/432;object-fit:cover;border-radius:12px;display:block;background:var(--land)}
+.flowfig figcaption{color:var(--muted);font-size:15px;margin-top:10px;max-width:80ch}
+.vidtools{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.flow{stroke-dasharray:14 20;animation:run 2.6s linear infinite}
+@keyframes run{to{stroke-dashoffset:-68}}
+@media (prefers-reduced-motion:reduce){.flow{animation:none}}
+.intro{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:clamp(24px,4vw,56px);margin-top:-90px;position:relative;padding-bottom:56px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 14px 40px #0b2e3426;align-self:start}
+.photo{width:100%;aspect-ratio:4/5;border-radius:10px;object-fit:cover;display:block;background:var(--soft)}
+.ph{display:grid;place-items:center;font:600 64px "Source Serif 4",serif;color:#fff;background:linear-gradient(160deg,var(--water),var(--land))}
+.card h1{font-size:clamp(30px,3vw,36px);margin:18px 0 6px}
+.role{color:var(--muted);margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:14px;text-decoration:none;color:var(--ink);background:var(--card)}
+a.chip:hover{border-color:var(--water)}
+.about{padding-top:110px}
+.about p{max-width:68ch;margin:0 0 14px;font-size:17px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.tag{background:var(--soft);border-left:3px solid var(--silt);padding:6px 12px;border-radius:4px;font-size:15px}
+.notice{margin-top:24px;border:1px solid var(--silt);background:color-mix(in srgb,var(--silt) 10%,var(--bg));border-radius:10px;padding:16px 18px;max-width:68ch}
+.notice b{display:block;margin-bottom:4px}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr))}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;position:relative}
+.box h3{margin:0 0 8px;font-size:18px}
+.box p{margin:0;color:var(--muted);font-size:15px}
+.person{display:flex;gap:14px;align-items:center}
+.avatar{width:72px;height:72px;border-radius:50%;object-fit:cover;flex:none;background:var(--soft)}
+.avatar.ph{font-size:24px;background:linear-gradient(160deg,var(--water),var(--land))}
+.person b{display:block;font-size:17px}
+.person span{display:block;color:var(--muted);font-size:14px}
+.rows{list-style:none;margin:0;padding:0}
+.rows li{display:grid;grid-template-columns:8.5em minmax(0,1fr);gap:18px;padding:14px 0;border-top:1px solid var(--line);position:relative}
+.rows li:first-child{border-top:0}
+.yr{font-family:"Source Serif 4",serif;font-weight:650;font-size:20px;color:var(--water);white-space:nowrap}
+.sub{color:var(--muted);font-size:14px;display:block}
+.news li .yr{font-size:16px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(24px,4vw,56px)}
+.plain{margin:0;padding-left:20px}.plain li{margin:6px 0;position:relative}
+.money{white-space:nowrap;font-weight:600;color:var(--ink)}
+.status{font-size:13px;border-radius:999px;padding:2px 10px;background:var(--soft);white-space:nowrap}
+.gallery{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))}
+.gallery figure{margin:0;position:relative}
+.gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;display:block}
+.gallery figcaption{font-size:14px;color:var(--muted);margin-top:6px}
+.empty{color:var(--muted);border:1px dashed var(--line);border-radius:10px;padding:28px;text-align:center}
+.contact{background:var(--land);color:#e4f1f2;border:0}
+.contact h2{color:#fff}.contact a{color:#fff}
+.contact .two p{margin:0 0 10px}
+footer{background:var(--land);color:#a9cdd1;font-size:14px;padding:18px 0;border-top:1px solid #ffffff22}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:42px;height:42px;flex:none;border-radius:50%;box-shadow:0 0 0 2px #ffffff40}
+.hero.big .herotext{display:flex;align-items:flex-end;gap:clamp(16px,3vw,32px)}.emblem{width:clamp(92px,15vw,190px);height:auto;flex:none;filter:drop-shadow(0 8px 22px #0008)}
+.mapbox{margin-top:28px}.mapbox iframe{display:block;width:100%;height:clamp(280px,40vw,420px);border:0;border-radius:14px;background:#0b3740}
+.mapcard{display:flex;align-items:center;gap:16px;padding:22px;border-radius:14px;background:#ffffff14;border:1px solid #ffffff33}.mapcard svg{width:44px;height:44px;color:var(--silt);flex:none}.mapcard b{display:block;font-size:19px;color:#fff}.mapcard span{color:#cfe6e8}
+.mapbtns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.mapbtn{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:10px;background:var(--silt);color:#fff!important;text-decoration:none;font-weight:600}.mapbtn.ghost{background:transparent;border:1px solid #ffffff66}
+.hero canvas.fluid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;touch-action:pan-y;cursor:crosshair;display:block}.hero.live video{display:none}.hero.live{touch-action:pan-y}
+.herotext{pointer-events:none}.herotext [contenteditable]{pointer-events:auto}
+.fluidhint{position:absolute;right:max(4vw,16px);top:16px;z-index:2;background:#0a2a2fcc;color:#fff;font-size:13px;padding:7px 14px;border-radius:999px;pointer-events:none;animation:hint 2.4s ease-in-out infinite}@keyframes hint{50%{opacity:.55}}
+.foot-emblem{display:block;width:clamp(96px,12vw,140px);height:auto;margin:36px auto 0}
+.links a[aria-current]{background:#ffffff26;color:#fff}
+.hero.big{height:clamp(300px,40vw,500px)}.hero.small{height:clamp(170px,20vw,240px)}
+.herotext{position:absolute;left:0;right:0;bottom:0;z-index:1;padding-bottom:clamp(18px,3vw,36px);color:#fff}
+.herotext h1{color:#fff;font-size:clamp(36px,5.4vw,64px);text-shadow:0 2px 18px #0009}
+.herotext p{margin:8px 0 0;font-size:clamp(15px,1.6vw,19px);color:#e6f3f4;text-shadow:0 1px 10px #0009;max-width:60ch}
+.wrap.narrow{max-width:900px;text-align:center}.welcome{border-top:0}.welcome h2{font-size:clamp(28px,3.6vw,42px);margin-bottom:0}
+.lead{font-size:19px;color:var(--muted);margin:16px auto 0;max-width:62ch}
+.mv{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:24px}
+.mvbox{background:var(--land);color:#e4f1f2;border-radius:14px;padding:clamp(22px,3vw,36px)}.mvbox h3{color:#fff;margin:0 0 10px;font-size:26px}.mvbox p{margin:0;font-size:17px}
+.headcard{display:flex;gap:clamp(18px,3vw,28px);align-items:center;text-decoration:none;color:inherit;margin-top:30px;padding:clamp(18px,2.5vw,28px);border:1px solid var(--line);border-radius:12px;background:var(--card)}
+a.headcard:hover{border-color:var(--water)}.headcard .avatar{width:min(var(--hs,140px),32vw);height:min(var(--hs,140px),32vw)}.sizer{display:flex;align-items:center;gap:12px;margin-top:12px;font-size:14px;color:var(--muted)}.sizer input{flex:1;accent-color:var(--silt);min-height:32px}.headcard .avatar.ph{font-size:44px}.headcard b{display:block;font-size:clamp(18px,calc(var(--hs,140px) / 5.2),40px);font-family:"Source Serif 4",serif;margin:4px 0;line-height:1.15}.headcard .sub{font-size:16px}
+.cardname{font-size:clamp(26px,2.6vw,32px);margin:18px 0 6px}
+.social{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}.contact .chip{background:transparent;color:#fff;border-color:#ffffff55}
+.thanks{font-family:"Source Serif 4",serif;font-size:22px;text-align:center;color:#fff;margin:30px 0 0}
+.intro{margin-top:clamp(28px,4vw,48px)!important}.about{padding-top:0!important}
+/* editing */
+.editing [contenteditable]{outline:1px dashed color-mix(in srgb,var(--silt) 70%,transparent);outline-offset:2px;border-radius:3px;min-width:2em;display:inline-block}
+.editing [contenteditable]:empty::before{content:attr(data-ph);color:var(--muted);opacity:.7}
+.editing .blockedit{display:block}
+.del{position:absolute;top:6px;right:6px;min-height:32px;height:32px;padding:0 10px;font-size:13px;color:#b3261e;background:var(--card)}
+.rows .del{top:10px;right:0}
+.add{margin-top:14px;border-style:dashed;color:var(--water);background:transparent}
+.editing [data-photo]{cursor:pointer;outline:3px dashed var(--silt);outline-offset:3px}
+.photohint{font-size:13px;color:var(--muted);margin-top:8px}
+.editing .rows li{padding-right:84px}
+.bar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:30;display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--ink);color:var(--bg);padding:10px 12px 10px 18px;border-radius:14px;box-shadow:0 10px 30px #0006;width:min(760px,calc(100% - 24px))}
+.bar span{flex:1;font-size:14px;min-width:180px}
+.bar button{border:0}
+.bar .primary{background:var(--silt);color:#fff;font-weight:600}
+.toast{position:fixed;left:50%;top:76px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:10px;z-index:40;max-width:calc(100% - 24px);font-size:15px}
+.modal{position:fixed;inset:0;background:#0009;z-index:50;display:grid;place-items:center;padding:16px}
+.modal>div{background:var(--card);color:var(--ink);border-radius:12px;padding:20px;width:min(640px,100%)}
+.modal textarea{width:100%;height:240px;font:13px/1.4 ui-monospace,monospace;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg);color:var(--ink)}
+.modal .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.urlrow{font-size:13px;color:var(--muted);display:block}
+@media(max-width:820px){.intro{grid-template-columns:minmax(0,1fr);margin-top:-70px}.about{padding-top:0}.card{max-width:420px}}
+@media(max-width:600px){.rows li{grid-template-columns:minmax(0,1fr);gap:4px}.brand{font-size:16px}}
+@media(max-width:520px){.brand span{display:none}.btn-edit{padding:0 12px}.links a{padding:10px 8px}}
+</style></head><body>
+<div id="app"></div>
+<script type="application/json" id="state">{"profile": {"name": "Abhishek Kumar Pandey", "title": "Assistant Professor", "dept": "Department of Civil Engineering", "inst": "Indian Institute of Technology (ISM) Dhanbad", "photo": "images/abhishek-k-pandey.jpg", "email": "akpandey@iitism.ac.in", "phone": "+91-326-223-5333", "address": "Department of Civil Engineering, \nIIT (ISM) Dhanbad, Jharkhand 826004, India", "bio": "Abhishek Kumar Pandey is an Assistant Professor in the Department of Civil Engineering at IIT (ISM) Dhanbad, where he has taught since October 2023. His research sits where rivers meet: he combines laboratory hydraulics with three-dimensional computational fluid dynamics to study how flow, sediment and pollutants behave at open-channel junctions, how river beds evolve during floods, and how structures such as bed sills can reduce scour and flow separation.", "bio2": "He received his Ph.D. in Civil Engineering from IIT Gandhinagar as a Prime Minister's Research Fellow, with a thesis on 3D CFD modelling of open-channel junction flow on fixed and mobile beds, and his B.Tech. in Civil Engineering from NIT Patna. Before joining IIT (ISM) he was a post-doctoral fellow at IIT Gandhinagar and an Institute Post-doctoral Fellow at IIT Bombay.", "openings": "Students interested in river hydraulics, sediment transport or CFD for Ph.D. or M.Tech. research are welcome to write with a CV and a short note on their interests.", "links": [{"label": "Institute profile", "url": "https://www.iitism.ac.in/faculty-details?faculty=akpandey"}, {"label": "LinkedIn", "url": "https://www.linkedin.com/in/abhishek-pandey-9bb700103/"}, {"label": "CV (PDF)", "url": "https://www.iitism.ac.in/storage/FacultyDetails/CV_1738164117679a47959fb89.pdf"}, {"label": "Email", "url": "mailto:akpandey@iitism.ac.in"}]}, "interests": [{"t": "Open-channel junction hydraulics", "d": "Flow separation, secondary currents and mixing where tributaries join a main channel, and ways to control them."}, {"t": "Sediment transport and bed evolution", "d": "Scour, deposition and bed deformation at confluences under steady and flood conditions."}, {"t": "Computational fluid dynamics", "d": "3D RANS and VOF modelling with OpenFOAM, and the performance of turbulence models for river flows."}, {"t": "River engineering and floods", "d": "Flood-wave propagation, flood–building interaction, bank erosion and dam-break flood simulation."}], "news": [{"d": "2026", "t": "Study on bed sills for reducing flow separation at confluences published in Scientific Reports."}, {"d": "2025", "t": "Three-dimensional study of flood–building interactions published in the ASCE Journal of Hydraulic Engineering."}, {"d": "Ongoing", "t": "PI of a TexMIN (DST Technology Innovation Hub) project on a bilingual LLM framework for interpreting tailings dam-break simulations."}, {"d": "2024", "t": "Editor's Choice, ASCE Journal of Irrigation and Drainage Engineering, for the paper on bed evolution at a channel junction in floods."}, {"d": "Oct 2023", "t": "Joined the Department of Civil Engineering, IIT (ISM) Dhanbad."}], "groups": [{"label": "Ph.D. scholars", "people": [{"name": "Rauminsh Kumar", "topic": "Bank erosion and protection", "since": "July 2024 – present", "photo": "images/rauminsh-kumar.jpg"}, {"name": "Sarthak Mishra", "topic": "Application of ML in River Flow", "since": "Feb 2025 – present", "photo": "images/sarthak-mishra.jpg"}, {"name": "Alka Kumari", "topic": "River engineering", "since": "Oct 2025 – present", "photo": "images/alka-kumari.jpg"}, {"name": "Bimosh Sahoo", "topic": "Cascading dam-break flood simulations", "since": "July 2025 – present", "photo": "images/bimosh-sahoo.jpg"}, {"name": "Arpit Singh", "topic": "Soil and Water Assessment Tool", "since": "Apr 2025 – present", "photo": "images/arpit-singh.jpg"}, {"name": "Avijit Ghosh", "topic": "Microplastic Hydrodynamics", "since": "Feb 2026 – present", "photo": "images/avijit-ghosh.jpg"}]}, {"label": "M.Tech. students", "people": [{"name": "Preety Kumari", "topic": "Coastal flooding impacts", "since": "Jul 2025 – present", "photo": "images/preety-kumari.jpg"}, {"name": "Mayank Kumar", "topic": "Dyke breach modelling", "since": "Jul 2025 – present", "photo": "images/mayank-kumar.jpg"}, {"name": "Amrit Kumar", "topic": "Hydraulic modelling of flood induced Dam break", "since": "Jul 2025 – present", "photo": "images/amrit-kumar.jpg"}]}, {"label": "Alumni", "people": [{"name": "Abhishek Kumar", "topic": "Flooding impacts on infrastructure", "since": "Jan 2024 – Jan 2026", "photo": ""}, {"name": "Shubham Mishra", "topic": "Non-Newtonian fluid dynamics", "since": "Jan 2024 – Jan 2026", "photo": "images/shubham-mishra.jpg"}]}, {"label": "New group", "people": []}], "journals": [{"y": "2026", "t": "Sandilya, S. S., Das, B. S., & Pandey, A. K. Bed sill effectiveness in reducing flow separation at open channel confluences. Scientific Reports.", "doi": "10.1038/s41598-026-47318-8"}, {"y": "2025", "t": "Kumar, A. S., Pandey, A. K., Mohapatra, P. K., & Bhatia, U. Three-dimensional numerical study of flood–building interactions to assess flood adaptation strategies. Journal of Hydraulic Engineering, 151(5), 04025028.", "doi": ""}, {"y": "2025", "t": "Pandey, A. K., Balasubramanian, K., & Sahu, B. K. Reduction of channel junction scour using a bed sill: a 3D numerical study. Acta Geophysica, 1–15.", "doi": ""}, {"y": "2024", "t": "Pandey, A. K., & Mohapatra, P. K. 3D numerical simulations of bed evolutions at an open channel junction for flood conditions. Journal of Irrigation and Drainage Engineering, 150(3), 04024007.", "doi": ""}, {"y": "2023", "t": "Pandey, A. K., & Mohapatra, P. K. Flow dynamics and pollutant transport at an artificial right-angled open-channel junction with a deformed bed. Journal of Hydraulic Engineering, 149(4), 04023006.", "doi": ""}, {"y": "2022", "t": "Pandey, A. K., & Mohapatra, P. K. Three-dimensional numerical simulation of flood-wave propagation at a combining open-channel junction. Journal of Irrigation and Drainage Engineering, 148(11), 04022038.", "doi": ""}, {"y": "2022", "t": "Pandey, A. K., & Mohapatra, P. K. Discussion of “Vortical structures and mixing in lateral discharge of gravity currents” (Mahmodinia & Javan, 2021). Environmental Fluid Mechanics, 22(4), 1025–1033.", "doi": ""}, {"y": "2022", "t": "Pandey, A. K., & Mohapatra, P. K. Discussion of Zhang et al. (2020), large eddy simulation of sediment transport using a discrete particle method. Journal of Hydraulic Research, 60(1), 182–183.", "doi": ""}, {"y": "2021", "t": "Pandey, A. K., & Mohapatra, P. K. Reduction of the flow separation zone at a combining open-channel junction using alternate suction and blowing. Journal of Irrigation and Drainage Engineering, 147(10), 06021011.", "doi": ""}, {"y": "2020", "t": "Pandey, A. K., Mohapatra, P. K., Jain, V., & Bhatia, U. Studying subcritical opposing channel flows. Journal of Applied Water Engineering and Research, 8(4), 262–276.", "doi": ""}], "confs": [{"y": "2022", "t": "Pandey, A. K., & Mohapatra, P. K. Performance of turbulence models for steady flow in a combined open channel junction. 39th IAHR World Congress, Granada, Spain, 3848–3857.", "doi": ""}, {"y": "2021", "t": "Pandey, A. K., Mohapatra, P. K., & Jain, V. Studying the channel confluence hydraulics using eddy viscosity models and Reynolds stress model. In Recent Advances in Computational Mechanics and Simulations, Springer, 295–305.", "doi": ""}, {"y": "2020", "t": "Pandey, A. K., Mohapatra, P. K., & Jain, V. Equivalent Manning's roughness in combining open channel junction flows. World Environmental and Water Resources Congress 2020, 99–107.", "doi": ""}, {"y": "2019", "t": "Pandey, A. K., & Mohapatra, P. K. 3D simulation of flow in a right-angled channel junction with a pit. World Environmental and Water Resources Congress 2019.", "doi": ""}], "projects": [{"t": "Bilingual (English and Hindi) LLM framework for real-time interpretation of tailings dam-break simulations for emergency planning", "role": "Principal Investigator · Sponsored", "fund": "TexMIN, Technology Innovation Hub (DST)", "amt": "₹21.62 lakh", "dur": "24 months", "st": "Ongoing"}, {"t": "Hydrological study for the Gare Palma Sector-I Coal Mine, Tamnar, Raigarh (CG)", "role": "Co-Investigator · Consultancy", "fund": "Jindal Power Limited", "amt": "₹89.78 lakh", "dur": "6 months", "st": "Completed"}, {"t": "Scientific assessment of old and dangerous BCCL mines", "role": "Member · Consultancy", "fund": "BCCL, Dhanbad", "amt": "₹1.475 crore", "dur": "9 months", "st": "Ongoing"}], "teaching": [{"c": "NCED504", "n": "Computational Fluid Dynamics in Civil Engineering", "l": "PG · Monsoon 2025–26"}, {"c": "NCES101", "n": "Engineering Graphics", "l": "UG · 2024–25, 2025–26"}, {"c": "CEC306", "n": "Water Resources Engineering", "l": "UG · Winter 2024–25"}, {"c": "CEC308", "n": "Water Resources Engineering Laboratory", "l": "UG · Winter 2024–25"}, {"c": "CEE202", "n": "Fluid Mechanics", "l": "UG · Summer 2023–24"}, {"c": "CEC502", "n": "Research Methodology and Statistics", "l": "PG · Winter 2023–24"}, {"c": "ES212", "n": "Fluid Mechanics (Graduate Teaching Fellow, IIT Gandhinagar)", "l": "UG · Winter 2018–19"}], "education": [{"d": "2016–2022", "t": "Ph.D., Civil Engineering — IIT Gandhinagar", "s": "Thesis: 3D CFD modeling of the open channel junction flow on fixed and mobile beds. Advisors: Prof. Pranab K. Mohapatra and Prof. Vikrant Jain."}, {"d": "2012–2016", "t": "B.Tech., Civil Engineering — NIT Patna", "s": ""}], "experience": [{"d": "2023–now", "t": "Assistant Professor, Civil Engineering — IIT (ISM) Dhanbad", "s": ""}, {"d": "2023", "t": "Institute Post-doctoral Fellow, Civil Engineering — IIT Bombay", "s": "April – October 2023"}, {"d": "2022–2023", "t": "Post-doctoral Fellow, Civil Engineering — IIT Gandhinagar", "s": "February 2022 – February 2023"}], "awards": ["Editor's Choice, ASCE Journal of Irrigation and Drainage Engineering (2024)", "Editor's Choice, ASCE Journal of Hydraulic Engineering (2023)", "SERB International Travel Grant (2022)", "Prime Minister's Research Fellowship (2018–2021)", "Graduate Teaching Fellow, IIT Gandhinagar (2019)", "Start-Early Ph.D. Fellowship, IIT Gandhinagar (2016)", "MHRD Ph.D. Fellowship (2016–2021)"], "service": ["Warden, Aquamarine hostel, IIT (ISM)", "Time-table Coordinator, Department of Civil Engineering", "Member, DPGC", "Organising Committee, SRISTI International Conference, IIT (ISM)", "Technical Advisory Committee, AWaRe 2025 International Conference, Bhopal", "RC Officer, JoSAA 2024, IIT (ISM)", "Reviewer: Scientific Data, Physics of Fluids, Acta Geophysica, J. Irrigation and Drainage Engineering, Water Resources Management, ISH Journal of Hydraulic Engineering"], "gallery": [{"src": "images/gallery-1.jpg", "cap": ""}, {"src": "images/gallery-2.jpg", "cap": ""}, {"src": "images/gallery-3.jpg", "cap": ""}, {"src": "images/gallery-4.jpg", "cap": ""}, {"src": "images/gallery-5.jpg", "cap": ""}, {"src": "images/gallery-6.jpg", "cap": ""}, {"src": "images/gallery-7.jpg", "cap": ""}, {"src": "images/gallery-8.jpg", "cap": ""}], "media": {"video": "flow.mp4", "poster": "flow.jpg", "cap": "Simulated turbulent flow at a right-angled open-channel junction. A sediment-laden tributary (brown) enters the clear main channel, a separation zone forms below the downstream corner, and eddies are shed along the mixing layer. Two-dimensional lattice-Boltzmann simulation with a Smagorinsky turbulence model; brightness shows flow speed and vorticity."}, "lab": {"name": "HydroSIM", "full": "Hydraulics and Simulation Lab · Department of Civil Engineering, IIT (ISM) Dhanbad", "welcome": "Welcome to HydroSIM — Simulating Fluid Flows", "tagline": "Combining laboratory hydraulics and three-dimensional computational fluid dynamics to understand flow, sediment and flood behaviour in rivers, for safer and more resilient water infrastructure.", "about": "HydroSIM is a research group in the Department of Civil Engineering at IIT (ISM) Dhanbad, led by Prof. Abhishek Kumar Pandey. The group studies open-channel junctions, sediment transport and bed evolution, flood-wave propagation, bank erosion and dam-break floods. Its tools range from laboratory flumes to 3D RANS, LES and VOF simulations in OpenFOAM, and increasingly machine learning for river flows.", "mission": "To produce reliable, physics-based understanding of river flows and sediment processes, and to turn it into practical tools for controlling scour, flow separation and flood risk.", "vision": "Rivers, mines and cities that are safer from floods and erosion because engineering decisions are grounded in sound hydraulics and trustworthy simulation.", "thanks": "Thank you for visiting HydroSIM!", "headSize": 125}}</script>
+<script id="app-js">
+{
+const app = document.getElementById('app');
+const S0 = document.getElementById('state').textContent;
+let S = JSON.parse(S0); S.media ||= {video: '', poster: '', cap: ''}; let edit = false, art = null, assets = null, saveT = 0;
+const DK = 'akp-site-draft';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const get = p => p.split('.').reduce((o, k) => o?.[k], S);
+const set = (p, v) => { const ks = p.split('.'), last = ks.pop(); ks.reduce((o, k) => o[k], S)[last] = v; };
+const safeUrl = u => /^(https?:|mailto:|data:image\/|images\/[\w.-]+$)/i.test(u || '') ? u : '';
+const initials = n => (n || '?').split(/\s+/).filter(w => w && w[0] === w[0].toUpperCase()).slice(0, 2).map(w => w[0]).join('') || '?';
+
+// editable text: shows plain text, becomes contenteditable in Edit mode
+const E = (p, tag = 'span', cls = '', ph = 'Type here') => {
+  const v = get(p) ?? '';
+  if (!edit && !v) return '';
+  return `<${tag} class="${cls}" data-k="${p}"${edit ? ` contenteditable="plaintext-only" spellcheck="true" data-ph="${esc(ph)}"` : ''}>${esc(v)}</${tag}>`;
+};
+const del = p => edit ? `<button class="del" data-del="${p}" aria-label="Remove">Remove</button>` : '';
+const add = (p, label) => edit ? `<button class="add" data-add="${p}">+ ${label}</button>` : '';
+const TPL = {
+  interests: {t: 'New research area', d: 'Short description'}, news: {d: '2026', t: 'New update'},
+  groups: {label: 'New group', people: []}, person: {name: 'Student name', topic: 'Research topic', since: 'Year – present', photo: ''},
+  journals: {y: '2026', t: 'Authors. Title. Journal, volume(issue), pages.', doi: ''}, confs: {y: '2026', t: 'Authors. Title. Conference, pages.', doi: ''},
+  projects: {t: 'Project title', role: 'Role', fund: 'Funding agency', amt: '₹ amount', dur: 'Duration', st: 'Ongoing'},
+  teaching: {c: 'CODE', n: 'Course name', l: 'UG · Term'}, education: {d: 'Years', t: 'Degree — Institution', s: ''},
+  experience: {d: 'Years', t: 'Position — Organisation', s: ''}, awards: 'New award', service: 'New role', links: {label: 'Link', url: 'https://'}
+};
+
+const img = (p, cls, name) => {
+  const src = safeUrl(get(p));
+  const attr = edit ? ` data-photo="${p}" role="button" tabindex="0" title="Click to change photo"` : '';
+  return src ? `<img class="${cls}" src="${esc(src)}" alt="${esc(name)}"${attr}>` : `<div class="${cls} ph"${attr} aria-label="${esc(name)}">${esc(initials(name))}</div>`;
+};
+
+function river() {
+  let s = `<svg viewBox="0 0 1200 340" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs><linearGradient id="wg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fa3ad"/><stop offset="1" stop-color="#22717b"/></linearGradient></defs>
+  <rect width="1200" height="340" fill="var(--land)"/>
+  <path d="M-20 188H470V-20H566V188H1220V302H-20Z" fill="url(#wg)"/>
+  <path d="M-20 188H470V-20M566 -20V188H1220M-20 302H1220" fill="none" stroke="#ffffff55" stroke-width="2"/>
+  <ellipse cx="690" cy="204" rx="110" ry="13" fill="#e0a052" opacity=".35"/>`;
+  for (let i = 0; i < 6; i++) { const y = 206 + i * 16, y2 = y + 12 - i * 2;
+    s += `<path class="flow" d="M-20 ${y}H440C560 ${y} 600 ${y2} 760 ${y2}H1220" stroke="#fff" stroke-opacity=".5" stroke-width="2" fill="none"/>`; }
+  for (let j = 0; j < 4; j++) { const x = 482 + j * 24, ye = 214 + j * 8;
+    s += `<path class="flow" d="M${x} -20V140C${x} ${190 + j * 6} ${x + 70} ${ye} 800 ${ye}H1220" stroke="#fff" stroke-opacity=".38" stroke-width="2" fill="none"/>`; }
+  for (let k = 0; k < 26; k++) s += `<circle cx="${380 + (k * 53) % 480}" cy="${292 - (k * 7) % 14}" r="${2 + k % 3}" fill="#e0a052" opacity=".55"/>`;
+  return s + `<g fill="#fff" fill-opacity=".85" font-family="IBM Plex Sans,sans-serif" font-size="15">
+  <text x="582" y="64">Tributary ↓</text><text x="640" y="172">Separation zone</text><text x="740" y="326">Main channel flow →</text></g></svg>`;
+}
+
+const vid = () => safeUrl(S.media?.video) || (/^[\w-]+\.(mp4|webm)$/.test(S.media?.video || '') ? S.media.video : '');
+const rows = (list, label) => `<ul class="rows">${(S[list] || []).map((r, i) => `<li><span class="yr">${E(`${list}.${i}.d`, 'span', '', 'Years')}</span><div>${E(`${list}.${i}.t`, 'b', 'blockedit')}${E(`${list}.${i}.s`, 'span', 'sub', 'Details (optional)')}</div>${del(`${list}.${i}`)}</li>`).join('')}</ul>${add(list, label)}`;
+const pubs = list => `<ul class="rows">${S[list].map((r, i) => `<li><span class="yr">${E(`${list}.${i}.y`)}</span><div>${E(`${list}.${i}.t`, 'span', 'blockedit')}${edit ? `<span class="urlrow">DOI: ${E(`${list}.${i}.doi`, 'span', '', '10.xxxx/… (optional)')}</span>` : r.doi ? `<a class="sub" href="https://doi.org/${esc(r.doi)}">doi:${esc(r.doi)}</a>` : ''}</div>${del(`${list}.${i}`)}</li>`).join('')}</ul>${add(list, 'Add publication')}`;
+const bullets = list => `<ul class="plain">${S[list].map((a, i) => `<li>${E(`${list}.${i}`)}${edit ? ` <button class="add" style="margin:0 0 0 6px;min-height:30px;padding:0 8px" data-del="${list}.${i}">Remove</button>` : ''}</li>`).join('')}</ul>${add(list, 'Add item')}`;
+
+const Fluid = (() => {
+  const SW = 288, SH = 96, DW = 864, DH = 288, UM = 0.8, UT = 0.7;
+  let canvas = null, gl = null, state = 'new', P = {}, vel, dye, prs, div, curl, quad, raf = 0, frame = 0, onScreen = true, touched = false;
+  const splats = [];
+  const VS = `#version 300 es
+in vec2 p; out vec2 uv; void main(){ uv = p * .5 + .5; gl_Position = vec4(p, 0., 1.); }`;
+  const HEAD = `#version 300 es
+precision highp float; in vec2 uv; out vec4 o; uniform vec2 tx;
+const float Y0 = .037, Y1 = .574, X0 = .28, X1 = .40;
+bool fluid(vec2 q){ return (q.y > Y0 && q.y < Y1) || (q.x > X0 && q.x < X1 && q.y >= Y1 - .002); }
+`;
+  const FS = {
+    advect: `uniform sampler2D v, q; uniform vec4 dis;
+void main(){ vec2 p = uv - texture(v, uv).xy * tx; o = dis * texture(q, p); }`,
+    bcv: `uniform sampler2D v; uniform float t;
+void main(){ vec2 u = texture(v, uv).xy;
+  if (!fluid(uv)) u = vec2(0.);
+  else if (uv.x < .018) { float s = (uv.y - Y0) / (Y1 - Y0); u = vec2(${UM} * 1.2 * (1. - pow(abs(2. * s - 1.), 6.)), .012 * sin(t * .031 + s * 5.)); }
+  else if (uv.y > .978) { float s = (uv.x - X0) / (X1 - X0); u = vec2(.01 * sin(t * .043 + s * 4.), -${UT} * 1.2 * (1. - pow(abs(2. * s - 1.), 6.))); }
+  else if (uv.x > .99) u = texture(v, vec2(.985, uv.y)).xy;
+  o = vec4(u, 0., 1.); }`,
+    bcd: `uniform sampler2D q;
+void main(){ vec4 c = texture(q, uv);
+  if (!fluid(uv)) c = vec4(0.);
+  else if (uv.y > .975) c.r = 1.;
+  else if (uv.x < .015) c.r = 0.;
+  o = c; }`,
+    curl: `uniform sampler2D v;
+void main(){ float L = texture(v, uv - vec2(tx.x, 0.)).y, R = texture(v, uv + vec2(tx.x, 0.)).y, B = texture(v, uv - vec2(0., tx.y)).x, T = texture(v, uv + vec2(0., tx.y)).x;
+  o = vec4(.5 * (R - L - (T - B)), 0., 0., 1.); }`,
+    vort: `uniform sampler2D v, cu; uniform float eps;
+void main(){ float L = abs(texture(cu, uv - vec2(tx.x, 0.)).x), R = abs(texture(cu, uv + vec2(tx.x, 0.)).x), B = abs(texture(cu, uv - vec2(0., tx.y)).x), T = abs(texture(cu, uv + vec2(0., tx.y)).x), C = texture(cu, uv).x;
+  vec2 f = .5 * vec2(T - B, R - L); f /= length(f) + 1e-4; f *= eps * C; f.y *= -1.;
+  o = vec4(texture(v, uv).xy + f, 0., 1.); }`,
+    div: `uniform sampler2D v;
+vec2 V(vec2 p){ return fluid(p) ? texture(v, p).xy : vec2(0.); }
+void main(){ o = vec4(.5 * (V(uv + vec2(tx.x, 0.)).x - V(uv - vec2(tx.x, 0.)).x + V(uv + vec2(0., tx.y)).y - V(uv - vec2(0., tx.y)).y), 0., 0., 1.); }`,
+    jac: `uniform sampler2D pr, dv;
+float Pq(vec2 p, float c){ if (p.x > .995) return 0.; return fluid(p) ? texture(pr, p).x : c; }
+void main(){ float C = texture(pr, uv).x;
+  o = vec4((Pq(uv - vec2(tx.x, 0.), C) + Pq(uv + vec2(tx.x, 0.), C) + Pq(uv - vec2(0., tx.y), C) + Pq(uv + vec2(0., tx.y), C) - texture(dv, uv).x) * .25, 0., 0., 1.); }`,
+    grad: `uniform sampler2D pr, v;
+float Pq(vec2 p, float c){ if (p.x > .995) return 0.; return fluid(p) ? texture(pr, p).x : c; }
+void main(){ float C = texture(pr, uv).x;
+  vec2 g = .5 * vec2(Pq(uv + vec2(tx.x, 0.), C) - Pq(uv - vec2(tx.x, 0.), C), Pq(uv + vec2(0., tx.y), C) - Pq(uv - vec2(0., tx.y), C));
+  o = vec4(texture(v, uv).xy - g, 0., 1.); }`,
+    scale: `uniform sampler2D q; uniform float k; void main(){ o = texture(q, uv) * k; }`,
+    splat: `uniform sampler2D q; uniform vec2 pt; uniform vec4 val; uniform float r;
+void main(){ vec2 d = uv - pt; d.x *= 3.; vec4 c = texture(q, uv); o = fluid(uv) ? c + exp(-dot(d, d) / r) * val : c; }`,
+    show: `uniform sampler2D dy, v, cu;
+void main(){ vec3 bank = vec3(.051, .302, .349);
+  float sh = 0.; for (int i = 0; i < 8; i++) { float a = float(i) * .785; sh += fluid(uv + vec2(cos(a) * .006, sin(a) * .018)) ? 0. : 1.; }
+  if (!fluid(uv)) { o = vec4(bank * (1. - .06 * (8. - sh) / 8.), 1.); return; }
+  float sp = clamp(length(texture(v, uv).xy) / ${(UM * 1.35).toFixed(3)}, 0., 1.);
+  vec4 d = texture(dy, uv); float c = clamp(d.r, 0., 1.), fo = clamp(d.g, 0., 1.);
+  float w = tanh(abs(texture(cu, uv).x) * 5.);
+  vec3 water = mix(vec3(.086, .361, .439), vec3(.361, .698, .745), sp);
+  vec3 silt = mix(vec3(.518, .337, .149), vec3(.769, .557, .29), sp);
+  vec3 col = mix(water, silt, c) * (.93 + .12 * w) + fo * vec3(.45, .5, .5);
+  col *= 1. - .32 * sh / 8.;
+  o = vec4(col, 1.); }`
+  };
+  function compile(src) {
+    const mk = (type, s) => { const sh = gl.createShader(type); gl.shaderSource(sh, s); gl.compileShader(sh); if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh)); return sh; };
+    const pr = gl.createProgram(); gl.attachShader(pr, mk(gl.VERTEX_SHADER, VS)); gl.attachShader(pr, mk(gl.FRAGMENT_SHADER, HEAD + src));
+    gl.bindAttribLocation(pr, 0, 'p'); gl.linkProgram(pr);
+    if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+    const u = {}; const n = gl.getProgramParameter(pr, gl.ACTIVE_UNIFORMS);
+    for (let i = 0; i < n; i++) { const name = gl.getActiveUniform(pr, i).name; u[name] = gl.getUniformLocation(pr, name); }
+    return {pr, u};
+  }
+  function target(w, h) {
+    const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+    for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, w, h, 0, gl.RGBA, gl.HALF_FLOAT, null);
+    const f = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, f); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0);
+    gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT);
+    return {t, f, w, h};
+  }
+  function pair(w, h) { let a = target(w, h), b = target(w, h); return {get r() { return a; }, get w() { return b; }, swap() { [a, b] = [b, a]; }}; }
+  function run(p, out, tex, uni) {
+    gl.useProgram(p.pr);
+    gl.uniform2f(p.u.tx, 1 / SW, 1 / SH);
+    let unit = 0;
+    for (const [name, t] of Object.entries(tex)) { gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t.t); gl.uniform1i(p.u[name], unit++); }
+    for (const [name, v] of Object.entries(uni || {})) { const l = p.u[name]; if (l == null) continue; Array.isArray(v) ? gl['uniform' + v.length + 'f'](l, ...v) : gl.uniform1f(l, v); }
+    if (out) { gl.bindFramebuffer(gl.FRAMEBUFFER, out.f); gl.viewport(0, 0, out.w, out.h); }
+    else { gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, DW, DH); }
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  }
+  function step() {
+    frame++;
+    while (splats.length) {
+      const s = splats.shift();
+      run(P.splat, vel.w, {q: vel.r}, {pt: [s.x, s.y], val: [s.dx, s.dy, 0, 0], r: s.r}); vel.swap();
+      run(P.splat, dye.w, {q: dye.r}, {pt: [s.x, s.y], val: [0, s.foam, 0, 0], r: s.r * .6}); dye.swap();
+    }
+    run(P.curl, curl, {v: vel.r});
+    run(P.vort, vel.w, {v: vel.r, cu: curl}, {eps: .07}); vel.swap();
+    run(P.div, div, {v: vel.r});
+    run(P.scale, prs.w, {q: prs.r}, {k: .8}); prs.swap();
+    for (let i = 0; i < 30; i++) { run(P.jac, prs.w, {pr: prs.r, dv: div}); prs.swap(); }
+    run(P.grad, vel.w, {pr: prs.r, v: vel.r}); vel.swap();
+    run(P.bcv, vel.w, {v: vel.r}, {t: frame}); vel.swap();
+    run(P.advect, vel.w, {v: vel.r, q: vel.r}, {dis: [.9992, .9992, 1, 1]}); vel.swap();
+    run(P.bcv, vel.w, {v: vel.r}, {t: frame}); vel.swap();
+    run(P.advect, dye.w, {v: vel.r, q: dye.r}, {dis: [.9995, .965, 1, 1]}); dye.swap();
+    run(P.bcd, dye.w, {q: dye.r}); dye.swap();
+  }
+  function init() {
+    state = 'off';
+    try {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      canvas = document.createElement('canvas'); canvas.className = 'fluid'; canvas.width = DW; canvas.height = DH;
+      canvas.setAttribute('aria-hidden', 'true');
+      gl = canvas.getContext('webgl2', {alpha: false, antialias: false, depth: false, stencil: false, powerPreference: 'high-performance'});
+      if (!gl || !gl.getExtension('EXT_color_buffer_float')) return;
+      for (const k in FS) P[k] = compile(FS[k]);
+      quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+      vel = pair(SW, SH); dye = pair(DW, DH); prs = pair(SW, SH); div = target(SW, SH); curl = target(SW, SH);
+      for (let i = 0; i < 500; i++) step();
+      if (gl.getError() !== gl.NO_ERROR) return;
+      state = 'on';
+      new IntersectionObserver(es => { onScreen = es[0].isIntersecting; }).observe(canvas);
+      const loop = () => { raf = requestAnimationFrame(loop); if (!onScreen || document.hidden) return; step(); run(P.show, null, {dy: dye.r, v: vel.r, cu: curl}); };
+      loop();
+    } catch (e) { state = 'off'; }
+  }
+  function toSim(hero, e) {
+    const b = hero.getBoundingClientRect(), s = Math.max(b.width / DW, b.height / DH);
+    const w = DW * s, h = DH * s, ox = (b.width - w) / 2, oy = (b.height - h) / 2;
+    return {x: (e.clientX - b.left - ox) / w, y: 1 - (e.clientY - b.top - oy) / h, s};
+  }
+  function mount() {
+    if (S.media && S.media.live === false) return;
+    if (state === 'new') init();
+    if (state !== 'on') return;
+    const hero = document.querySelector('.hero'); if (!hero) return;
+    hero.insertBefore(canvas, hero.querySelector('.herotext'));
+    hero.classList.add('live');
+    if (!touched) { const h = document.createElement('div'); h.className = 'fluidhint'; h.textContent = 'Touch or drag to stir the flow'; hero.appendChild(h); }
+    let last = null;
+    hero.addEventListener('pointerdown', e => {
+      if (e.target.closest('[contenteditable],a,button')) return;
+      last = toSim(hero, e);
+      splats.push({x: last.x, y: last.y, dx: 0, dy: 0, foam: .9, r: .0009});
+      if (!touched) { touched = true; hero.querySelector('.fluidhint')?.remove(); }
+    });
+    hero.addEventListener('pointermove', e => {
+      const p = toSim(hero, e);
+      if (last) {
+        const dx = (p.x - last.x) * SW, dy = (p.y - last.y) * SH;
+        if (dx || dy) splats.push({x: p.x, y: p.y, dx: Math.max(-6, Math.min(6, dx * 1.6)), dy: Math.max(-6, Math.min(6, dy * 1.6)), foam: Math.min(.5, Math.hypot(dx, dy) * .05), r: .0012});
+      }
+      last = (e.buttons || e.pointerType === 'touch' || e.pointerType === 'mouse') ? p : null;
+    });
+    hero.addEventListener('pointerleave', () => { last = null; });
+  }
+  return {mount};
+})();
+const MAPS_EMBED = true;
+const PAGES = [['home', 'Home'], ['team-head', 'Team Head'], ['team', 'Team'], ['gallery', 'Gallery']];
+const page = () => { const h = location.hash.slice(1); return PAGES.some(p => p[0] === h) ? h : 'home'; };
+const LOGO = '<img class="logo" src="mark.svg" alt="">'; const OLDLOGO = '<svg class="logo" viewBox="0 0 512 512" aria-hidden="true"><rect x="16" y="16" width="480" height="480" rx="110" fill="#0D4D59" stroke="#ffffff55" stroke-width="10"/><path d="M60 270H215V70H297V270C297 270 330 270 452 270V370H60Z" fill="#2E8C97"/><path d="M215 70H297V250C297 300 360 318 452 322V362C340 360 250 340 225 290Z" fill="#C98A3E"/><path d="M80 300H452M80 335H452" stroke="#fff" stroke-opacity=".55" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="350" cy="300" r="22" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="7"/></svg>';
+
+function render() {
+  S.lab ||= JSON.parse(S0).lab; S.media ||= {video: '', poster: '', cap: ''};
+  const P = S.profile, L = S.lab, pg = page(), label = PAGES.find(p => p[0] === pg)[1];
+  document.title = pg === 'home' ? L.name : `${label} · ${L.name}`;
+  document.body.classList.toggle('editing', edit);
+  const media = vid() ? `<video src="${esc(vid())}" poster="${esc(S.media.poster || '')}" autoplay muted loop playsinline aria-hidden="true"></video>` : river();
+  const hero = pg === 'home'
+    ? `<header class="hero big">${media}<div class="herotext wrap"><img class="emblem" src="emblem.svg" alt="HydroSIM Research Lab emblem"><div>${E('lab.name', 'h1')}${E('lab.full', 'p', 'blockedit', 'Full name of the lab')}</div></div></header>`
+    : `<header class="hero small">${media}<div class="herotext wrap"><h1>${esc(label)}</h1><p>${esc(L.name)} · ${esc(P.inst)}</p></div></header>`;
+  const headTag = edit ? 'div' : 'a';
+  const views = {
+    home: () => `
+<section class="band welcome"><div class="wrap narrow">${E('lab.welcome', 'h2', 'blockedit', 'Welcome line')}${E('lab.tagline', 'p', 'lead blockedit', 'Tagline')}</div></section>
+<section class="band alt"><div class="wrap two">
+  <div><h2>About the Lab</h2>${E('lab.about', 'p', 'blockedit', 'About the lab')}
+    <div class="tags">${S.interests.map(x => `<span class="tag">${esc(x.t)}</span>`).join('')}</div>
+    <${headTag} class="headcard" style="--hs:${+S.lab.headSize || 140}px"${edit ? '' : ' href="#team-head"'}>${img('profile.photo', 'avatar', P.name)}<span><span class="sub">Team head</span><b>${esc(P.name)}</b><span class="sub">${esc(P.title)}, ${esc(P.dept)}</span></span></${headTag}>${edit ? `<label class="sizer">Card size <input type="range" min="80" max="240" step="5" data-size="1" value="${+S.lab.headSize || 140}"></label>` : ''}
+  </div>
+  ${vid() || edit ? `<figure class="flowfig">${vid() ? `<video src="${esc(vid())}" poster="${esc(S.media.poster || '')}" autoplay muted loop playsinline controls></video>` : '<div class="empty">No video. Upload one to show it here and in the banner.</div>'}${E('media.cap', 'figcaption', 'blockedit', 'Caption')}${edit ? `<div class="vidtools"><button class="add" style="margin:0" data-toggle="media.live">Interactive banner: ${S.media.live === false ? 'Off' : 'On'}</button><button class="add" style="margin:0" id="vidUp">Replace video</button>${vid() ? '<button class="add" style="margin:0" data-clear="media.video">Remove video</button>' : ''}</div>` : ''}</figure>` : '<div></div>'}
+</div></section>
+<section class="band"><div class="wrap mv">
+  <div class="mvbox"><h3>Mission</h3>${E('lab.mission', 'p', 'blockedit', 'Mission')}</div>
+  <div class="mvbox"><h3>Vision</h3>${E('lab.vision', 'p', 'blockedit', 'Vision')}</div>
+</div></section>
+<section class="band alt"><div class="wrap"><h2>Research areas</h2>
+  <div class="grid">${S.interests.map((x, i) => `<div class="box">${E(`interests.${i}.t`, 'h3', 'blockedit')}${E(`interests.${i}.d`, 'p', 'blockedit')}${del(`interests.${i}`)}</div>`).join('')}</div>${add('interests', 'Add research area')}
+</div></section>
+<section class="band"><div class="wrap two">
+  <div><h2>Recent updates</h2><ul class="rows news">${S.news.map((n, i) => `<li><span class="yr">${E(`news.${i}.d`)}</span>${E(`news.${i}.t`, 'span', 'blockedit')}${del(`news.${i}`)}</li>`).join('')}</ul>${add('news', 'Add update')}</div>
+  <div>${P.openings || edit ? `<h2>Openings</h2><div class="notice" style="margin-top:0">${E('profile.openings', 'span', 'blockedit', 'Leave empty to hide this box')}</div>` : ''}</div>
+</div></section>`,
+    'team-head': () => `
+<section class="wrap intro">
+  <div class="card">${img('profile.photo', 'photo', P.name)}${edit ? `<div class="photohint">Click the photo to upload a new one.${P.photo ? ' <button class="add" style="margin:0;min-height:30px;padding:0 8px" data-clear="profile.photo">Remove photo</button>' : ''}</div>` : ''}
+    ${E('profile.name', 'h2', 'cardname')}<p class="role">${E('profile.title')}</p><p class="role">${E('profile.dept')}</p><p class="role">${E('profile.inst')}</p>
+    <div class="chips">${P.links.map((l, i) => edit ? `<span class="chip" style="position:relative;flex-direction:column;align-items:flex-start;padding-right:70px">${E(`profile.links.${i}.label`)}<span class="urlrow">${E(`profile.links.${i}.url`, 'span', '', 'https://…')}</span>${del(`profile.links.${i}`)}</span>` : safeUrl(l.url) ? `<a class="chip" href="${esc(l.url)}">${esc(l.label)} ↗</a>` : '').join('')}</div>${add('profile.links', 'Add link')}
+  </div>
+  <div class="about"><h2>About</h2>${E('profile.bio', 'p', 'blockedit', 'Biography')}${E('profile.bio2', 'p', 'blockedit', 'More biography (optional)')}
+    <div class="two" style="margin-top:12px"><div><h3>Education</h3>${rows('education', 'Add degree')}</div><div><h3>Experience</h3>${rows('experience', 'Add position')}</div></div>
+  </div>
+</section>
+<section class="band alt"><div class="wrap"><h2>Publications</h2><h3>Journal articles</h3>${pubs('journals')}<h3>Conference papers and book chapters</h3>${pubs('confs')}</div></section>
+<section class="band"><div class="wrap"><h2>Projects</h2>
+  <div class="grid">${S.projects.map((p, i) => `<div class="box">${E(`projects.${i}.t`, 'h3', 'blockedit')}<p>${E(`projects.${i}.role`)}</p><p>${E(`projects.${i}.fund`)}</p>
+    <p style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">${E(`projects.${i}.amt`, 'span', 'money')}${E(`projects.${i}.dur`)}${E(`projects.${i}.st`, 'span', 'status')}</p>${del(`projects.${i}`)}</div>`).join('')}</div>${add('projects', 'Add project')}
+</div></section>
+<section class="band alt"><div class="wrap two">
+  <div><h2>Teaching</h2><ul class="rows">${S.teaching.map((c, i) => `<li><span class="yr" style="font-size:16px">${E(`teaching.${i}.c`)}</span><div>${E(`teaching.${i}.n`, 'b', 'blockedit')}${E(`teaching.${i}.l`, 'span', 'sub')}</div>${del(`teaching.${i}`)}</li>`).join('')}</ul>${add('teaching', 'Add course')}</div>
+  <div><h2>Awards</h2>${bullets('awards')}<h3>Service and roles</h3>${bullets('service')}</div>
+</div></section>`,
+    team: () => `
+<section class="band" style="border-top:0"><div class="wrap">
+  ${S.groups.map((g, gi) => (g.people.length || edit) ? `<div style="position:relative">${E(`groups.${gi}.label`, 'h2')}${edit ? `<button class="add" style="margin:0 0 10px" data-del="groups.${gi}">Remove group</button>` : ''}
+    <div class="grid" style="margin-bottom:34px">${g.people.map((p, i) => { const b = `groups.${gi}.people.${i}`; return `<div class="box person">${img(`${b}.photo`, 'avatar', p.name)}<div>${E(`${b}.name`, 'b')}${E(`${b}.topic`, 'span')}${E(`${b}.since`, 'span')}</div>${del(b)}</div>`; }).join('')}</div>
+    ${add(`groups.${gi}.people`, 'Add person')}</div>` : '').join('')}
+  ${add('groups', 'Add group')}${edit ? '<p class="photohint">Click a round photo to upload that person\'s picture.</p>' : ''}
+  <p class="notice">Interested in joining ${esc(L.name)}? <a href="#home">See Openings on the Home page</a> or write to ${esc(P.email)}.</p>
+</div></section>`,
+    gallery: () => `
+<section class="band" style="border-top:0"><div class="wrap">
+  ${S.gallery.length ? `<div class="gallery">${S.gallery.map((g, i) => `<figure><img src="${esc(safeUrl(g.src))}" onerror="this.closest('figure').remove()" loading="lazy" alt="${esc(g.cap || 'Lab photo')}"${edit ? ` data-photo="gallery.${i}.src" role="button" tabindex="0"` : ''}>${E(`gallery.${i}.cap`, 'figcaption', 'blockedit', 'Caption')}${del(`gallery.${i}`)}</figure>`).join('')}</div>` : '<div class="empty">No photos yet.</div>'}
+  ${edit ? '<button class="add" id="addPhotos">+ Add photos</button>' : ''}
+</div></section>`
+  };
+  app.innerHTML = `
+<nav><div class="wrap"><a class="brand" href="#home">${LOGO}<span>${esc(L.name)}</span></a><div class="links">${PAGES.map(([h, l]) => `<a href="#${h}"${h === pg ? ' aria-current="page"' : ''}>${l}</a>`).join('')}</div>
+</div></nav>
+${hero}<main>${views[pg]()}</main>
+<section class="band contact" id="contact"><div class="wrap"><h2>Contact</h2><div class="two">
+  <div><p><b>${esc(P.name)}</b><br>${esc(P.title)}, ${esc(P.dept)}</p><p><b>Email</b><br>${edit ? E('profile.email') : `<a href="mailto:${esc(P.email)}">${esc(P.email)}</a>`}</p><p><b>Office phone</b><br>${E('profile.phone')}</p></div>
+  <div><p><b>Address</b><br>${E('profile.address', 'span', 'blockedit')}</p>
+    <div class="social">${P.links.filter(l => safeUrl(l.url)).map(l => `<a class="chip" href="${esc(l.url)}">${esc(l.label)} ↗</a>`).join('')}</div></div>
+</div>
+<div class="mapbox">${MAPS_EMBED ? `<iframe title="Map: IIT (ISM) Dhanbad" src="https://maps.google.com/maps?q=Department%20of%20Civil%20Engineering%2C%20IIT%20(ISM)%20Dhanbad&z=16&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>` : `<div class="mapcard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" fill="currentColor"/></svg><div><b>IIT (ISM) Dhanbad</b><span>Department of Civil Engineering · Dhanbad, Jharkhand 826004</span></div></div>`}
+<div class="mapbtns"><a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Department+of+Civil+Engineering%2C+IIT+(ISM)+Dhanbad">View on Google Maps ↗</a><a class="mapbtn ghost" href="https://www.google.com/maps/dir/?api=1&destination=IIT+(ISM)+Dhanbad">Get directions ↗</a></div></div>
+<img class="foot-emblem" src="emblem.svg" alt="">${E('lab.thanks', 'p', 'thanks blockedit', 'Closing line')}</div></section>
+<footer><div class="wrap">© ${new Date().getFullYear()} ${esc(L.name)} · ${esc(P.dept)}, ${esc(P.inst)}</div></footer>
+${edit ? `<div class="bar"><span>Editing: click any text to change it. Changes stay private until you save.</span><button id="jsonBtn">Data</button><button id="discard">Discard</button><button class="primary" id="saveBtn">Save &amp; publish</button></div>` : ''}`;
+  Fluid.mount();
+}
+window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); });
+
+function toast(msg, ms = 3800) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), ms); }
+function draft() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(DK, JSON.stringify(S)); } catch (e) {} }, 400); }
+function removeAt(p) { const ks = p.split('.'), i = +ks.pop(), arr = get(ks.join('.')); arr.splice(i, 1); }
+function pick(multi) { return new Promise(res => { const i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*'; i.multiple = !!multi; i.onchange = () => res([...i.files]); i.click(); }); }
+async function shrink(file, max = 1100) {
+  const bm = await createImageBitmap(file); const k = Math.min(1, max / Math.max(bm.width, bm.height));
+  const c = document.createElement('canvas'); c.width = Math.round(bm.width * k); c.height = Math.round(bm.height * k);
+  c.getContext('2d').drawImage(bm, 0, 0, c.width, c.height); return c.toDataURL('image/jpeg', .82);
+}
+async function store(file) {
+  if (assets) { try { const r = await assets.upload(file); return r.url || '/_blob/' + r.id; } catch (e) {} }
+  return shrink(file);
+}
+function buildDoc() {
+  const css = document.getElementById('css').textContent, js = document.getElementById('app-js').textContent;
+  const json = JSON.stringify(S).replace(/</g, '\\u003c');
+  const head = `<meta charset="utf-8"><link rel="icon" href="mark.png"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(S.lab.name)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,650&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">`;
+  return `<!DOCTYPE html>\n<html lang="en"><head>${head}<style id="css">${css}</style></head><body>\n<div id="app"></div>\n<script type="application/json" id="state">${json}<\/script>\n<script id="app-js">${js}<\/script>\n</body></html>`;
+}
+async function save() {
+  if (!art) { toast('Publishing is not available in this view. Your edits are kept in this browser; use “Data” to copy them.', 6000); return; }
+  const b = document.getElementById('saveBtn'); if (b) { b.disabled = true; b.textContent = 'Saving…'; }
+  try { try { localStorage.removeItem(DK); } catch (e) {} await art.publish(buildDoc()); toast('Saved. The site is updated.'); }
+  catch (e) {
+    const m = String(e?.code || e?.message || e);
+    if (/not_granted|not_writer/.test(m)) toast('You can view this site but not edit it. Ask the owner for edit access.', 6000);
+    else if (/conflict/.test(m)) toast('Someone else saved first; the page reloaded with their version.', 6000);
+    else toast('Could not save: ' + m, 6000);
+    try { localStorage.setItem(DK, JSON.stringify(S)); } catch (x) {}
+    if (b) { b.disabled = false; b.textContent = 'Save & publish'; }
+  }
+}
+function dataModal() {
+  const m = document.createElement('div'); m.className = 'modal';
+  m.innerHTML = `<div><h3 style="margin-top:0">Site data</h3><p class="sub">Copy this to back up the site, or paste saved data and press Load.</p><textarea id="jd"></textarea><div class="acts"><button id="jc">Copy</button><button id="jl">Load</button><button id="jx">Close</button></div></div>`;
+  document.body.appendChild(m); const ta = m.querySelector('#jd'); ta.value = JSON.stringify(S, null, 1);
+  m.querySelector('#jx').onclick = () => m.remove();
+  m.querySelector('#jc').onclick = async () => { try { await navigator.clipboard.writeText(ta.value); toast('Copied.'); } catch (e) { ta.select(); toast('Select all and copy manually.'); } };
+  m.querySelector('#jl').onclick = () => { try { S = JSON.parse(ta.value); m.remove(); draft(); render(); toast('Loaded. Press Save & publish to keep it.'); } catch (e) { toast('That is not valid site data.'); } };
+}
+
+app.addEventListener('input', e => { if (e.target.dataset.size) { S.lab.headSize = +e.target.value; document.querySelector('.headcard')?.style.setProperty('--hs', S.lab.headSize + 'px'); draft(); return; } const k = e.target.closest('[data-k]')?.dataset.k; if (k) { set(k, e.target.textContent); draft(); } });
+app.addEventListener('paste', e => { if (e.target.closest('[contenteditable]')) { e.preventDefault(); document.execCommand('insertText', false, e.clipboardData.getData('text/plain')); } });
+app.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.closest('[data-photo]')) e.target.click(); });
+app.addEventListener('click', async e => {
+  const t = e.target.closest('button,[data-photo]'); if (!t) return;
+  if (t.id === 'editBtn') { edit = !edit; render(); return; }
+  if (t.id === 'saveBtn') return save();
+  if (t.id === 'jsonBtn') return dataModal();
+  if (t.id === 'discard') { S = JSON.parse(S0); try { localStorage.removeItem(DK); } catch (x) {} edit = false; render(); toast('Changes discarded.'); return; }
+  if (t.dataset.del) { removeAt(t.dataset.del); draft(); render(); return; }
+  if (t.dataset.toggle) { set(t.dataset.toggle, get(t.dataset.toggle) === false); draft(); render(); return; }
+  if (t.dataset.clear) { set(t.dataset.clear, ''); draft(); render(); return; }
+  if (t.dataset.add) { const p = t.dataset.add, key = /people$/.test(p) ? 'person' : p.split('.').pop(); get(p).push(structuredClone(TPL[key])); draft(); render(); return; }
+  if (t.dataset.photo && edit) { const [f] = await pick(); if (!f) return; toast('Uploading photo…', 1500); set(t.dataset.photo, await store(f)); draft(); render(); return; }
+  if (t.id === 'vidUp') {
+    if (!assets) { toast('Video upload needs the published site and edit access.', 5000); return; }
+    const f = await new Promise(res => { const i = document.createElement('input'); i.type = 'file'; i.accept = 'video/mp4,video/webm'; i.onchange = () => res(i.files[0]); i.click(); });
+    if (!f) return; if (f.size > 20 * 1048576) { toast('Please choose a video under 20 MB.'); return; }
+    toast('Uploading video…', 3000);
+    try { const r = await assets.upload(f); S.media.video = r.url || '/_blob/' + r.id; S.media.poster = ''; draft(); render(); } catch (e) { toast('Upload failed: ' + (e?.message || e)); }
+    return;
+  }
+  if (t.id === 'addPhotos') { const fs = await pick(true); for (const f of fs) S.gallery.push({src: await store(f), cap: ''}); draft(); render(); }
+});
+
+const rm = matchMedia('(prefers-reduced-motion: reduce)');
+new MutationObserver(() => { if (rm.matches) document.querySelectorAll('video[autoplay]').forEach(v => { v.removeAttribute('autoplay'); v.pause(); }); }).observe(app, {childList: true});
+render();
+const use = n => (window.claude && window.claude.use) ? window.claude.use(n).catch(() => null) : Promise.resolve(null);
+}
+</script>
+</body></html>
